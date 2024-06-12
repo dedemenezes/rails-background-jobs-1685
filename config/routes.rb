@@ -9,4 +9,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  require "sidekiq/web"
+  authenticate :user, ->(user) { user.admin? } do # proc
+    mount Sidekiq::Web => '/sidekiq'
+  end
 end
